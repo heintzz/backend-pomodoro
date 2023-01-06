@@ -5,14 +5,14 @@ const bcrypt = require('bcrypt')
 const handleNewUser = async (req, res) => {
   const { email, password } = req.body
   if ((!email, !password))
-    return res.status(400).json({ msg: 'username and password are required' })
+    return res.status(400).json({ msg: 'email and password are required' })
 
   const duplicate = await User.findOne({ email: email }).exec()
   if (duplicate) return res.sendStatus(409)
   try {
     const hashedPassword = await bcrypt.hash(password, 10)
     const user = await User.create({
-      email,
+      email: email,
       password: hashedPassword,
     })
     await Timer.create({
