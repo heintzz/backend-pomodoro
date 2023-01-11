@@ -30,6 +30,7 @@ app.use(cookieParser())
 app.use('/register', require('./routes/register'))
 app.use('/auth', require('./routes/auth'))
 
+app.use(verifyJWT)
 app.use('/timer', require('./routes/api/timer'))
 
 mongoose.connection.once('open', () => {

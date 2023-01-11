@@ -12,7 +12,6 @@ const handleLogin = async (req, res) => {
 
     if (!foundUser) return res.status(401)
     const match = await bcrypt.compare(password, foundUser.password)
-
     if (match) {
         const accessToken = jwt.sign(
             {
@@ -37,7 +36,7 @@ const handleLogin = async (req, res) => {
         )
 
         foundUser.refreshToken = refreshToken
-        const result = await foundUser.save()
+        await foundUser.save()
         res.cookie('jwt', refreshToken, {
             httpOnly: true,
             sameSite: 'None',

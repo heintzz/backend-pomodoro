@@ -7,13 +7,12 @@ const getTimer = async (req, res) => {
 }
 
 const updateTimer = async (req, res) => {
-    const { durations, types } = req.body
+    let types = Object.keys(req.body)
     const userSetting = await Timer.findOne({ userId: req.id })
     if (!userSetting) return res.sendStatus(401)
-    types.forEach((type, i) => {
-        userSetting[type] = durations[i]
+    types.forEach((type) => {
+        userSetting[type] = req.body[type]
     })
-
     const setting = await userSetting.save()
     res.json(setting)
 }
