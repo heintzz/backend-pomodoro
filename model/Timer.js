@@ -8,15 +8,15 @@ const timerSchema = new Schema({
     },
     pomodoroDuration: {
         type: Number,
-        default: 25 * 60,
+        default: 25,
     },
     shortBreakDuration: {
         type: Number,
-        default: 5 * 60,
+        default: 5,
     },
     longBreakDuration: {
         type: Number,
-        default: 15 * 60,
+        default: 15,
     },
 })
 
