@@ -18,7 +18,6 @@ app.use(credentials)
 // Cross Origin Resource Sharing
 app.use(cors(corsOptions))
 
-// built-in middleware to handle urlencoded form data
 app.use(express.urlencoded({ extended: false }))
 
 // built-in middleware for json
@@ -29,10 +28,11 @@ app.use(cookieParser())
 
 app.use('/register', require('./routes/register'))
 app.use('/auth', require('./routes/auth'))
+app.use('/refresh', require('./routes/refresh'))
 
 app.use(verifyJWT)
 app.use('/timer', require('./routes/api/timer'))
 
 mongoose.connection.once('open', () => {
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
 })
