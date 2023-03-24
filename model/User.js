@@ -2,23 +2,32 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 
 const userSchema = new Schema({
-    email: {
-        type: String,
-        required: true,
+  email: {
+    type: String,
+    required: function () {
+      return !this.googleId
     },
-    password: {
-        type: String,
-        required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: function () {
+      return !this.googleId
     },
-    roles: {
-        User: {
-            type: Number,
-            default: 150,
-        },
-        Editor: Number,
-        Admin: Number,
-    },
-    refreshToken: String,
+  },
+  googleId: {
+    type: String,
+    required: false,
+  },
+  refreshToken: String,
+  // roles: {
+  //   User: {
+  //     type: Number,
+  //     default: 150,
+  //   },
+  //   Editor: Number,
+  //   Admin: Number,
+  // },
 })
 
 module.exports = mongoose.model('User', userSchema)
