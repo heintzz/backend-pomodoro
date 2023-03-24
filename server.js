@@ -1,36 +1,42 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
-const PORT = process.env.PORT || 3500
-const mongoose = require('mongoose')
 const corsOptions = require('./config/corsOptions')
+const mongoose = require('mongoose')
 const connectDB = require('./config/dbConnection')
-const credentials = require('./middleware/credentials')
 const cookieParser = require('cookie-parser')
-const verifyJWT = require('./middleware/verifyJWT')
+require('dotenv').config()
+// middleware
+const credentials = require('./middleware/credentials')
+const session = require('express-session')
+const passport = require('passport')
 
+const PORT = process.env.PORT || 3500
 mongoose.set('strictQuery', true)
-
 connectDB()
 
 app.use(credentials)
-
-// Cross Origin Resource Sharing
 app.use(cors(corsOptions))
-
 app.use(express.urlencoded({ extended: false }))
-
-// built-in middleware for json
 app.use(express.json())
-
-// middleware for cookies
 app.use(cookieParser())
 
-app.use('/register', require('./routes/register'))
-app.use('/auth', require('./routes/auth'))
-app.use('/refresh', require('./routes/refresh'))
+app.use(
+  session({
+    secret: process.env.SECRET_SESSION,
+    resave: false,
+    saveUninitialized: false,
+  })
+)
 
-app.use(verifyJWT)
+app.use(passport.initialize())
+app.use(passport.session())
+
+app.use('/auth', require('./routes/auth'))
+app.use('/register', require('./routes/register'))
+app.use('/refresh', require('./routes/refresh'))
+app.use('/auth/google', require('./routes/authGoogle'))
+
 app.use('/timer', require('./routes/api/timer'))
 
 mongoose.connection.once('open', () => {
