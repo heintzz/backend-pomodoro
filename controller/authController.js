@@ -5,8 +5,7 @@ const jwt = require('jsonwebtoken')
 
 const handleLogin = async (req, res) => {
   const { email, password } = req.body
-  if (!email || !password)
-    return res.status(400).json({ msg: 'email and password are required.' })
+  if (!email || !password) return res.status(400).json({ msg: 'email and password are required.' })
 
   const foundUser = await User.findOne({ email: email }).exec()
 
@@ -49,4 +48,11 @@ const handleLogin = async (req, res) => {
   }
 }
 
-module.exports = handleLogin
+const handleLogout = async (req, res) => {
+  res.cookie('refreshToken', '', {
+    maxAge: 0,
+  })
+  res.sendStatus(200)
+}
+
+module.exports = { handleLogin, handleLogout }

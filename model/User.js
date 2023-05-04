@@ -4,9 +4,7 @@ const { Schema } = mongoose
 const userSchema = new Schema({
   email: {
     type: String,
-    required: function () {
-      return !this.googleId
-    },
+    required: true,
     unique: true,
   },
   password: {

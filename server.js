@@ -9,8 +9,6 @@ require('dotenv').config()
 // middleware
 const credentials = require('./middleware/credentials')
 const session = require('express-session')
-const passport = require('passport')
-
 const PORT = process.env.PORT || 3500
 mongoose.set('strictQuery', true)
 connectDB()
@@ -29,13 +27,9 @@ app.use(
   })
 )
 
-app.use(passport.initialize())
-app.use(passport.session())
-
 app.use('/auth', require('./routes/auth'))
 app.use('/register', require('./routes/register'))
 app.use('/refresh', require('./routes/refresh'))
-app.use('/auth/google', require('./routes/authGoogle'))
 
 app.use('/timer', require('./routes/api/timer'))
 
